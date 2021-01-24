@@ -1,6 +1,6 @@
 {
   "name": "mittee",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A super tiny event bus",
   "main": "dist/mittee.js",
   "module": "dist/mittee.es.js",

@@ -1,14 +1,14 @@
 export type EventName = string | symbol;
 
-// 事件回调函数可以接收一些参数
+// The event callback function can receive some parameters
 export type Handler<T = any> = (params?: T) => void;
 export type CommonHandler = (name: EventName, params?: any) => void;
 
-// 已注册的事件所对应的回调函数数组
+// An array of callback functions corresponding to registered events
 export type HandlerList = Handler[];
 export type CommonHandlerList = CommonHandler[];
 
-// 事件名与回调函数数组的映射表
+// The mapping table of the event name and the callback function array
 export type HandlerMap = Map<EventName, HandlerList | CommonHandlerList>;
 
 export interface Mittee {
@@ -35,14 +35,14 @@ export interface Mittee {
 export default function mittee (all: HandlerMap = new Map()): Mittee {
   const mit = {
     /**
-		 * 事件名与回调函数数组的映射表
+		 * The mapping table of the event name and the callback function array
 		 */
     all,
 
     /**
-		 * 注册事件
-		 * @param {string|symbol} evtName 事件名, 通配符 `"*"` 表示所有事件
-		 * @param {Function} handler 指定事件的回调函数
+		 * Register the event
+		 * @param {string|symbol} evtName Event name, '*' means all events
+		 * @param {Function} handler Specifies the callback function for the event
 		 * @memberOf mittee
 		 */
     on<T = any>(evtName: EventName, handler: Handler<T>): void {
@@ -51,6 +51,12 @@ export default function mittee (all: HandlerMap = new Map()): Mittee {
       !l && all.set(evtName, [handler]);
     },
 
+    /**
+     * Register an event and trigger it only once
+		 * @param {string|symbol} evtName Event name, '*' means all events
+		 * @param {Function} handler Specifies the callback function for the event
+		 * @memberOf mittee
+     */
     once<T = any>(evtName: EventName, handler: Handler<T>): void {
       const fn = (params: any) => {
         mit.off(evtName, fn);
@@ -60,9 +66,9 @@ export default function mittee (all: HandlerMap = new Map()): Mittee {
     },
 
     /**
-		 * 注销事件
-		 * @param {string|symbol} evtName 事件名, 通配符 `"*"` 表示所有事件
-		 * @param {Function} handler 需要注销的函数
+		 * Remove the event
+		 * @param {string|symbol} evtName Event name, '*' means all events
+		 * @param {Function} handler Specify the callback function
 		 * @memberOf mittee
 		 */
     off<T = any>(evtName: EventName, handler: Handler<T>): void {
@@ -71,13 +77,14 @@ export default function mittee (all: HandlerMap = new Map()): Mittee {
     },
 
     /**
-		 * 触发事件
-     * 若事件通配符 `"*"` 下存在函数，则在执行完指定事件的回调函数后进行调用
+		 * Trigger an event
+     * If a function exists under the event '*',
+     * it is called after the callback function for the specified event has been executed
 		 *
-		 * 注意：不支持手动触发事件通配符 `"*"` 的回调函数
+		 * Note: Callback functions that manually trigger the event '*' are not supported
 		 *
-		 * @param {string|symbol} type 事件名
-		 * @param {Any} [params] 传递给回调函数的参数
+		 * @param {string|symbol} evtName Event name
+		 * @param {Any} [params] The argument passed to the callback function
 		 * @memberOf mittee
 		 */
     emit<T = any>(evtName: EventName, params: T): void {

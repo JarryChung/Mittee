@@ -1,6 +1,8 @@
 # Mittee
 
-> Gzip 后不超过 **400 bytes**
+English ｜ [中文文档](./README.zh-cn.md)
+
+Frame-independent event manager, no more than **400 bytes** after Gzip.
 
 ## Import
 
@@ -27,30 +29,30 @@ import mittee from 'mittee'
 
 const mit = mittee()
 
-// 监听事件
+// Listen for events
 mit.on('event', params => console.log('event', params) )
 
-// 监听所有事件
+// Listen for all events
 mit.on('*', (eventName, params) => console.log(eventName, params) )
 
-// 仅监听一次事件
+// Listen for an event once
 mit.once('once', params => console.log('once', params))
 
-// 触发事件
+// Trigger an event
 mit.emit('event', { name: 'Mittee' }) // event { name: 'Mittee' }
 mit.emit('once', { name: 'Mittee' }) // once { name: 'Mittee' }
 mit.emit('once', { name: 'Mittee' }) // no console
 
-// 清除所有事件
+// Clear all events
 mit.all.clear()
 
-// 若需使用解除监听功能，请传入函数引用
+// Using the de-listening function, pass in the function reference
 function onFoo() {}
-mit.on('foo', onFoo)   // 监听事件
-mit.off('foo', onFoo)  // 解除监听
+mit.on('foo', onFoo)   // on
+mit.off('foo', onFoo)  // off
 ```
 
-支持 TypeScript
+Support for TypeScript
 
 ```typescript
 import mittee, { Mittee } from 'mittee'
@@ -72,41 +74,52 @@ Returns **Mittee**
 
 ### all
 
-事件名与回调函数数组的映射表
+The mapping table of the event name and the callback function array
 
 ### on
 
-注册事件
+Register the event
 
 #### Parameters
 
--   `evtName` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol))** 事件名, 通配符 `"*"` 表示所有事件
--   `handler` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 指定事件的回调函数
+-   `evtName` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol))** Event name, '\*' means all events
+-   `handler` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Specifies the callback function for the event
+
+Returns **void** 
+
+### once
+
+Register an event and trigger it only once
+
+#### Parameters
+
+-   `evtName` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol))** Event name, '\*' means all events
+-   `handler` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Specifies the callback function for the event
 
 Returns **void** 
 
 ### off
 
-注销事件
+Remove the event
 
 #### Parameters
 
--   `evtName` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol))** 事件名, 通配符 `"*"` 表示所有事件
--   `handler` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 需要注销的函数
+-   `evtName` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol))** Event name, '\*' means all events
+-   `handler` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Specify the callback function
 
 Returns **void** 
 
 ### emit
 
-触发事件
-若事件通配符 `"*"` 下存在函数，则在执行完指定事件的回调函数后进行调用
+Trigger an event
+If a function exists under the event '\*',
+it is called after the callback function for the specified event has been executed
 
-注意：不支持手动触发事件通配符 `"*"` 的回调函数
+Note: Callback functions that manually trigger the event '\*' are not supported
 
 #### Parameters
 
--   `evtName` **EventName** 
--   `params` **Any?** 传递给回调函数的参数
--   `type` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol))** 事件名
+-   `evtName` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol))** Event name
+-   `params` **Any?** The argument passed to the callback function
 
 Returns **void** 
